@@ -1,0 +1,32 @@
+﻿{
+  "name": "张三",
+  "name_en": "San Zhang",
+  "school": "示例大学",
+  "school_en": "Example University",
+  "college": "生命科学学院",
+  "college_en": "School of Life Sciences",
+  "major": "生物学",
+  "major_en": "Biological Sciences",
+  "grade": "本科应届推免生",
+  "primary_email": "student@example.edu.cn",
+  "intent": "预计可获得保研名额申请攻读硕士研究生。如果有机会倾向于直博。",
+  "intent_en": "pursuing a direct Ph.D. / Master's degree",
+  "research_background": {
+    "advisor": "李四老师",
+    "advisor_en": "Prof. Si Li",
+    "project_name": "某生物学机制的探究",
+    "experience_summary": "有一年完整的独立科研经历，您的研究方向与技能需求与我本科阶段的主要研究内容有一定相关，能较快融入课题组相关科研工作",
+    "experience_summary_en": "Notably, I have one year of independent research experience under Prof. Si Li. This experience has trained me to work independently and think critically.",
+    "core_skills": "分子生物学基础实验、细胞培养与数据统计分析"
+  },
+  "default_attachments": {
+    "resume": "",
+    "personal_statement": "",
+    "presentation": ""
+  },
+  "safety_limits": {
+    "max_attachment_total_mb": 10.0,
+    "warning_attachment_mb": 5.0,
+    "dedup_window_days": 14
+  }
+}

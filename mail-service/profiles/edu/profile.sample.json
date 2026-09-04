@@ -1,0 +1,13 @@
+{
+  "name": "edu",
+  "displayName": "高校校园邮箱",
+  "email": "your_student_id@your_school.edu.cn",
+  "driver": "bundle",
+  "envUserKey": "EDU_EMAIL_USER",
+  "envPassKey": "EDU_EMAIL_PASS",
+  "imapHost": "mail.your_school.edu.cn",
+  "imapPort": "993",
+  "smtpHost": "mail.your_school.edu.cn",
+  "smtpPort": "465",
+  "notes": "通用高校校园邮箱配置。支持网易企业邮、腾讯企业邮或 Coremail 等各大高校邮件底座。"
+}

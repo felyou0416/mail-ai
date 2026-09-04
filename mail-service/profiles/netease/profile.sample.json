@@ -1,0 +1,14 @@
+{
+  "name": "netease",
+  "displayName": "网易 163 邮箱",
+  "email": "your_username@163.com",
+  "driver": "bundle",
+  "envUserKey": "NETEASE_EMAIL_USER",
+  "envPassKey": "NETEASE_EMAIL_PASS",
+  "imapHost": "imap.163.com",
+  "imapPort": "993",
+  "smtpHost": "smtp.163.com",
+  "smtpPort": "465",
+  "authType": "authorization_code",
+  "notes": "支持 DPAPI 加密凭据与 .env。注意网易反垃圾策略 (554 拦截)。"
+}

@@ -1,0 +1,17 @@
+﻿SUBJECT: Re: 研究生申请信——{{MY_SCHOOL}}{{MY_MAJOR}}{{MY_NAME}}
+---BODY---
+{{NAME}}{{TITLE}}您好，
+
+冒昧打扰。上周曾给您发送过一封关于研究生推免自荐的邮件，不知您是否有时间查阅。
+
+简单向您补充说明：我本科期间在{{ADVISOR}}课题组独立负责了"{{PROJECT_NAME}}"，{{EXPERIENCE_SUMMARY}}，对您在{{INTEREST}}领域的相关工作依然怀有强烈的兴趣与憧憬。
+
+如果您有名额或有任何进一步了解的需求，随时盼复。如果目前课题组名额已满或暂无招生计划，也麻烦您得空时告知一声，学生非常感谢您的指导。
+
+{{ATTACH_NOTE}}
+
+祝您科研工作顺利！
+
+{{MY_NAME}}
+{{MY_SCHOOL}}{{MY_COLLEGE}}
+{{MY_EMAIL}}

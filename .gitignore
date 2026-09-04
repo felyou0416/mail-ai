@@ -1,0 +1,58 @@
+# ===================================================
+# 敏感凭证文件（授权码、加密凭据、私有配置）
+# ===================================================
+.env
+*.env
+.credential
+*.credential
+credentials.json
+# ===================================================
+# Fmail 临时邮箱凭证与管理员密钥保护 (绝不上云)
+# ===================================================
+fmail/credentials.json
+fmail/*.credential*
+fmail/.env
+fmail/*.env
+fmail/*.json
+*.admin_password
+
+mail-service/profiles/**/profile.json
+mail-service/profiles/**/signature.html
+!mail-service/profiles/**/profile.sample.json
+!mail-service/profiles/**/signature.sample.html
+
+# ===================================================
+# 运行时产物与临时文件
+# ===================================================
+*.log
+mail.log
+downloads/
+**/downloads/
+drafts/
+**/drafts/
+*.tmp
+*.bak
+
+# ===================================================
+# 个人通讯录与私有数据
+# ===================================================
+contacts.json
+**/contacts.json
+套磁信/personal/
+
+# ===================================================
+# Python & Node 缓存与依赖
+# ===================================================
+__pycache__/
+*.py[cod]
+*$py.class
+node_modules/
+npm-debug.log*
+
+# ===================================================
+# IDE 与操作系统临时文件
+# ===================================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

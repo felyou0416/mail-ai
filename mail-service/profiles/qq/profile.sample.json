@@ -1,0 +1,14 @@
+{
+  "name": "qq",
+  "displayName": "QQ 邮箱",
+  "email": "your_qq_number@qq.com",
+  "driver": "bundle",
+  "envUserKey": "QQ_EMAIL_USER",
+  "envPassKey": "QQ_EMAIL_PASS",
+  "imapHost": "imap.qq.com",
+  "imapPort": "993",
+  "smtpHost": "smtp.qq.com",
+  "smtpPort": "465",
+  "authType": "authorization_code",
+  "notes": "使用 16 位授权码认证。通用性强，发信必须严格匹配发件人地址。"
+}

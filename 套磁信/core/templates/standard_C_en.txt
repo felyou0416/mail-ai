@@ -1,0 +1,24 @@
+﻿SUBJECT: Prospective Graduate Student Inquiry – {{MY_NAME_EN}} ({{MY_SCHOOL_EN}})
+---BODY---
+Dear Professor {{NAME_EN}},
+
+I hope this email finds you well.
+
+My name is {{MY_NAME_EN}}, a senior undergraduate majoring in {{MY_MAJOR_EN}} at the {{MY_COLLEGE_EN}}, {{MY_SCHOOL_EN}}. I am on track to receive a recommendation for graduate admission and am writing to express my strong interest in pursuing a direct Ph.D. / Master's degree under your mentorship.
+
+I have long been intrigued by your lab's work on {{INTEREST}}—particularly your investigations in this field. During my undergraduate studies, I developed a solid foundation in experimental techniques, which I believe aligns well with the experimental needs of your research team.
+
+{{EXPERIENCE_SUMMARY_EN}}
+
+I am writing to inquire if you have available openings for incoming graduate students in your group for the upcoming intake. I would be very happy to provide more details about my research experience and future interests upon request.
+
+{{ATTACH_NOTE_EN}}
+
+Thank you very much for your time and consideration, and I look forward to hearing from you.
+
+Best regards,
+
+{{MY_NAME_EN}}
+Undergraduate in {{MY_MAJOR_EN}}
+{{MY_COLLEGE_EN}}, {{MY_SCHOOL_EN}}
+Email: {{MY_EMAIL}}

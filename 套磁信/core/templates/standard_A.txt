@@ -1,0 +1,17 @@
+﻿SUBJECT: 研究生申请信——{{MY_SCHOOL}}{{MY_MAJOR}}{{MY_NAME}}
+---BODY---
+{{NAME}}{{TITLE}}您好，
+
+我是{{MY_SCHOOL}}{{MY_COLLEGE}}{{MY_MAJOR}}专业本科生{{MY_NAME}}，{{MY_INTENT}}
+
+对您的{{INTEREST}}相关研究很感兴趣。
+
+本科期间在{{ADVISOR}}课题组独立负责了"{{PROJECT_NAME}}"，{{EXPERIENCE_SUMMARY}}，不知您是否仍有名额。
+
+{{ATTACH_NOTE}}
+
+祝好。
+
+{{MY_NAME}}
+{{MY_SCHOOL}}{{MY_COLLEGE}}
+{{MY_EMAIL}}
