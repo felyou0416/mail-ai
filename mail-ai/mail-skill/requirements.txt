@@ -1,0 +1,7 @@
+imap-tools>=1.5.0
+python-dotenv>=1.0.0
+beautifulsoup4>=4.12.0
+jinja2>=3.1.0
+markdown>=3.4.0
+chromadb>=0.4.0
+sentence-transformers>=2.2.2

@@ -40,7 +40,7 @@ try {
 Write-Host "[3/4] 检查并初始化本地私密配置文件 (自动防 Git 泄露) ... " -ForegroundColor White
 
 foreach ($acc in @("edu", "qq", "netease")) {
-    $pDir = Join-Path $script:PROJECT_ROOT "mail-service\profiles\$acc"
+    $pDir = Join-Path $script:PROJECT_ROOT "mail-ai\profiles\$acc"
     if (-not (Test-Path $pDir)) { New-Item -ItemType Directory -Path $pDir -Force | Out-Null }
     
     $pJson = Join-Path $pDir "profile.json"
@@ -63,7 +63,7 @@ foreach ($acc in @("edu", "qq", "netease")) {
 # 4. 执行综合体检
 Write-Host ""
 Write-Host "[4/4] 启动全系统综合体检 ..." -ForegroundColor White
-$docScript = Join-Path $script:PROJECT_ROOT "mail-service\core\system-doctor.ps1"
+$docScript = Join-Path $script:PROJECT_ROOT "mail-ai\core\system-doctor.ps1"
 & powershell -ExecutionPolicy Bypass -File $docScript
 
 Write-Host ""

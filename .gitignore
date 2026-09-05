@@ -16,10 +16,10 @@ fmail/*.env
 fmail/*.json
 *.admin_password
 
-mail-service/profiles/**/profile.json
-mail-service/profiles/**/signature.html
-!mail-service/profiles/**/profile.sample.json
-!mail-service/profiles/**/signature.sample.html
+mail-ai/profiles/**/profile.json
+mail-ai/profiles/**/signature.html
+!mail-ai/profiles/**/profile.sample.json
+!mail-ai/profiles/**/signature.sample.html
 
 # ===================================================
 # 运行时产物与临时文件
@@ -38,7 +38,7 @@ drafts/
 # ===================================================
 contacts.json
 **/contacts.json
-套磁信/personal/
+taoci/personal/
 
 # ===================================================
 # Python & Node 缓存与依赖
@@ -56,3 +56,40 @@ npm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# ===================================================
+# 个人申请材料、调研报告与运行产物（含学生隐私，绝不上云）
+# ===================================================
+.preview/
+刘光慧套磁信-最终版.md
+中科院动物所导师筛选推荐报告.html
+taoci/docs/
+taoci/scripts/extract_materials.py
+
+# ===================================================
+# 个人推免/套磁/导师调研产出（含学生背景，通配兜底；正式留存统一放 taoci/personal/archive/）
+# ===================================================
+*导师筛选*
+*导师推荐*
+*推荐报告*
+*调研报告*
+*套磁信-最终版*
+*推免导师*
+*推免*报告*
+
+# ===================================================
+# mail-skill 数据与私密配置（核心源码纳入版本管理）
+# ===================================================
+mail-ai/mail-skill/mail_data/
+mail-ai/mail-skill/config.txt
+mail-ai/mail-skill/wheels/
+mail-ai/mail-skill/dist/
+mail-ai/mail-skill/*.skill
+mail-ai/mail-skill/.coverage
+mail-ai/mail-skill/**/__pycache__/
+mail-ai/mail-skill/**/*.pyc
+mail-ai/mail-skill/.mypy_cache/
+mail-ai/mail-skill/.pytest_cache/
+mail-ai/mail-skill/.ruff_cache/
+mail-ai/mail-skill/.claude/
+

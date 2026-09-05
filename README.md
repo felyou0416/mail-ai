@@ -23,53 +23,79 @@
 ## 整体架构与目录设计
 
 ```
-mail-ai\
-├── mail.ps1                        # 顶层快速发信与多通道网关（必须显式 --via）
-├── README.md                       # 本文档（工具箱全局索引与规范）
-├── project_memory.md               # 核心项目记忆与使用准则
+mail-ai\                             # 项目根目录
+├── mail.ps1                          # 顶层快速发信与多通道网关（必须显式 --via）
+├── ui.ps1                            # 本地 Web 控制台启动器
+├── setup-local.ps1                   # 本地环境初始化向导
+├── README.md                         # 本文档（工具箱全局索引与规范）
+├── project_memory.md                 # 核心项目记忆与使用准则
+├── INTEGRATION_PLAN.md               # mail-skill 整合方案文档
 │
 │  ================ 【1. 真实主用邮箱基础设施 (IMAP/SMTP)】 ================
 │
-├── mail-service\                   # 【真实主邮箱矩阵（高校校园邮箱 Edu、QQ、网易 163）】
-│   ├── SKILL.md                    # 统一技能主文档（全局规范、所有命令语法、最高防删红线）
-│   ├── edu.ps1                    # 高校校园邮箱 (Edu Mail)专属快捷入口 (.\edu.ps1)
-│   ├── qq.ps1                      # QQ 邮箱专属快捷入口 (.\qq.ps1)
-│   ├── netease.ps1                 # 网易 163 邮箱专属快捷入口 (.\netease.ps1)
-│   ├── assets\app-icon.png         # 技能图标
+├── mail-ai\                         # 【真实主邮箱矩阵 + AI 智能检索引擎】
+│   ├── SKILL.md                      # 统一技能主文档（全局规范、所有命令语法、最高防删红线）
+│   ├── edu.ps1                       # 高校校园邮箱 (Edu Mail) 专属快捷入口
+│   ├── qq.ps1                        # QQ 邮箱专属快捷入口
+│   ├── netease.ps1                   # 网易 163 邮箱专属快捷入口
+│   ├── assets\app-icon.png           # 技能图标
 │   │
-│   ├── core\                       # 【唯一共享底层引擎（单点维护，杜绝冗余）】
-│   │   ├── mail-engine.ps1         # 核心调度脚本（参数解析、环境隔离、重试、附件自愈）
-│   │   ├── imap.bundle.js          # 单份 IMAP 收信驱动（Node.js）
-│   │   ├── smtp.bundle.js          # 单份 SMTP 发信驱动（Node.js）
-│   │   └── setup-credential.ps1    # 通用 DPAPI 加密凭据配置脚本
+│   ├── core\                         # 【唯一共享底层引擎（单点维护，杜绝冗余）】
+│   │   ├── mail-engine.ps1           # 核心调度脚本（参数解析、环境隔离、重试、附件自愈）
+│   │   ├── imap.bundle.js            # 单份 IMAP 收信驱动（Node.js）
+│   │   ├── smtp.bundle.js            # 单份 SMTP 发信驱动（Node.js）
+│   │   ├── draft-manager.ps1         # 草稿箱全生命周期管理
+│   │   ├── mailbox-inspector.ps1     # 全邮箱健康巡检与跨文件夹深搜
+│   │   ├── system-doctor.ps1         # 系统全局体检诊断
+│   │   └── setup-credential.ps1      # 通用 DPAPI 加密凭据配置脚本
 │   │
-│   ├── profiles\                   # 【3 大邮箱专属资产与配置隔离】
-│   │   ├── edu\                   # 高校校园邮箱 (.env, contacts.json, signature.html, downloads/, mail.log)
-│   │   ├── qq\                     # QQ 邮箱 (.env, signature.html, downloads/, mail.log)
-│   │   └── netease\                # 网易 163 邮箱 (.credential, .env, signature.html, downloads/, mail.log)
+│   ├── profiles\                     # 【3 大邮箱专属资产与配置隔离】
+│   │   ├── edu\                      # 高校校园邮箱 (.env, contacts.json, signature.html, downloads/, mail.log)
+│   │   ├── qq\                       # QQ 邮箱 (.env, signature.html, downloads/, mail.log)
+│   │   └── netease\                  # 网易 163 邮箱 (.credential, .env, signature.html, downloads/, mail.log)
 │   │
-│   └── references\                 # 【各邮箱专属差异参考手册 (References)】
-│       ├── edu.md                 # 高校校园网特征、邮件底座配置、导师联系人、禁发临时域规则
-│       ├── qq.md                   # QQ 邮箱授权码规范、发件人一致性要求
-│       └── netease.md              # 网易 163 邮箱 DPAPI 配置、反垃圾 554 防御建议
+│   ├── references\                   # 【各邮箱专属差异参考手册 (References)】
+│   │   ├── edu.md                    # 高校校园网特征、邮件底座配置、导师联系人、禁发临时域规则
+│   │   ├── qq.md                     # QQ 邮箱授权码规范、发件人一致性要求
+│   │   └── netease.md                # 网易 163 邮箱 DPAPI 配置、反垃圾 554 防御建议
+│   │
+│   ├── mail-skill\                   # 【AI 智能检索引擎 (SQLite FTS5 + ChromaDB 语义搜索)】
+│   │   ├── SKILL.md                  # 技能说明与 API 规范
+│   │   ├── USAGE.md                  # 架构与使用指南
+│   │   ├── scripts\
+│   │   │   ├── mail_cli.py           # CLI 入口（Windows UTF-8 自动适配）
+│   │   │   └── mail_manager\         # 核心模块（config_manager 自动桥接 profiles/）
+│   │   └── mail_data\                # 运行时数据（gitignore 排除）
+│   │       └── <account_id>/         # 按账户隔离：SQLite + ChromaDB + 附件 + EML
+│   │
+│   └── web\                          # 【本地可视化 Web 控制台 (前后端分离)】
+│       ├── server.py                 # Python 轻量级 REST API 服务
+│       └── index.html                # 原生 HTML5 + TailwindCSS 单页应用
 │
 │  ================ 【2. 独立临时测试邮箱工具 (REST HTTP API)】 ================
 │
-├── fmail\                          # 【Cloudflare 临时邮箱系统 (Fmail)】
-│   ├── SKILL.md                    # 临时邮箱专属技能说明与 API 规范
-│   ├── fmail.ps1                   # 专属命令行交互入口（.\fmail.ps1）
-│   └── api_client.py               # 核心 Python REST 客户端（防删防火墙、验证码提取）
+├── fmail\                            # 【Cloudflare 临时邮箱系统 (Fmail)】
+│   ├── SKILL.md                      # 临时邮箱专属技能说明与 API 规范
+│   ├── fmail.ps1                     # 专属命令行交互入口
+│   └── api_client.py                 # 核心 Python REST 客户端（防删防火墙、验证码提取）
 │
 │  ================ 【3. 专项业务 Skill（推免学术联系）】 ================
 │
-└── 套磁信\                         # 【高校推免 / 保研导师联系专项业务】
-    ├── SKILL.md                    # 专属业务流程与 Agent 动作规约
-    ├── 套磁信模板.md                # 4 套专属模板库 + 风格分析 + 历史统计
-    ├── contacts.sample.csv         # 导师通讯录标准导入样例
-    ├── tracking.csv                # 发送历史与状态记录
-    └── scripts\
-        ├── batch-send.ps1          # 批量个性化生成与防封发送引擎（直连 mail-engine）
-        └── track-mail.ps1          # 回复检索与 7 天未回复催信预警（直连 mail-engine）
+└── taoci\                            # 【高校推免 / 保研导师联系专项业务】
+    ├── SKILL.md                      # 专属业务流程与 Agent 动作规约
+    ├── 套磁信模板.md                  # 4 套专属模板库 + 风格分析 + 历史统计
+    ├── core\
+    │   ├── engine\                   # 批量发送、草稿生成、追踪、导师查重引擎
+    │   │   ├── batch-send.ps1        # 批量个性化生成与防封发送引擎（直连 mail-engine）
+    │   │   ├── track-mail.ps1        # 回复检索与 7 天未回复催信预警
+    │   │   ├── create-draft.ps1      # 草稿自动生成
+    │   │   ├── mentor-checker.ps1    # 导师风控查重与防撞车雷达
+    │   │   └── attachment-manager.ps1 # 附件材料库管理
+    │   ├── schemas\                  # 数据模型定义
+    │   └── templates\                # 模板库
+    ├── personal\                     # 个人数据（gitignore 排除）
+    ├── scripts\                      # 辅助脚本
+    └── docs\                         # 文档（gitignore 排除）
 ```
 
 ---
@@ -119,7 +145,7 @@ mail-ai\
 ### 4. 深入具体邮件系统操作
 ```powershell
 # 进入统一邮件系统目录
-cd mail-service
+cd mail-ai
 
 # 操作 高校校园邮箱 (Edu Mail)
 .\edu.ps1 test
@@ -140,49 +166,79 @@ cd ..\fmail
 .\fmail.ps1 accounts
 ```
 
-### 5. 系统全局体检与诊断中心 (`doctor`)
+### 5. AI 智能检索与语义搜索 (mail-skill)
 ```powershell
-# 一键诊断 4 大模块：4 邮箱通道、推免附件规范、追踪库、垃圾箱误拦截（输出评分）
+# 同步邮箱至本地 SQLite + 向量索引
+.\mail.ps1 sync --via edu --days 14
+
+# 自然语言语义搜索（如 "导师关于实验的通知"）
+.\mail.ps1 smart-search "导师关于实验的通知"
+
+# 生成近期邮件结构化摘要简报
+.\mail.ps1 summarize --limit 10
+
+# 邮件重要度评估与业务分类
+.\mail.ps1 classify <message_id>
+
+# 邮件往来会话线索树
+.\mail.ps1 thread <message_id>
+
+# 直接透传调用底层 mail-skill 任意命令
+.\mail.ps1 skill <cmd> [args...]
+```
+
+### 6. 系统全局体检与诊断中心 (`doctor`)
+```powershell
+# 一键诊断：4 邮箱通道 + mail-skill 依赖 + 推免附件规范 + 追踪库 + 垃圾箱误拦截
 .\mail.ps1 doctor
 ```
 
-### 6. 高频微程序操作 (Micro-tools)
+### 7. 高频微程序操作 (Micro-tools)
 ```powershell
-# 草稿箱管理：秒级查看、一键安全归档测试草稿、安全外发确认
+# 草稿箱管理
 .\mail.ps1 draft list [--via edu]
 .\mail.ps1 draft view <ID> [--via edu]
-.\mail.ps1 draft clean-test [--via edu]
 .\mail.ps1 draft send <ID> --via edu --confirm
 
-# 附件材料库：私有库材料体检、绑定默认学术简历
+# 附件材料库
 .\mail.ps1 attach list
 .\mail.ps1 attach verify
 .\mail.ps1 attach bind <材料名/ID>
 
-# 全邮箱健康巡检与跨文件夹深搜（防漏初审通知）
+# 全邮箱健康巡检与跨文件夹深搜
 .\mail.ps1 scan [--via edu]
 .\mail.ps1 search-all "推免通知" [--via edu]
 
-# 导师风控查重与防撞车（14天内防重复发信、同单位同实验室冲突预警）
+# 导师风控查重与防撞车
 .\mail.ps1 check-mentor "导师姓名" [单位名称]
 
-# 结构化 JSON 数据输出（供程序、脚本或 AI Agent 直接消费）
+# 定时发送（到时间自动发）
+.\mail.ps1 send --via edu --to "prof@univ.edu.cn" --subject "课题汇报" --body "正文" --schedule "2026-09-05 09:00"
+
+# 结构化 JSON 输出
 .\mail.ps1 doctor -Json
 .\mail.ps1 draft list -Json
-.\mail.ps1 attach list -Json
 .\mail.ps1 check-mentor "导师姓名" "单位名称" -Json
 ```
 
-### 7. 本地可视化 Web 控制台 (前后端分离架构)
+### 8. 推免套磁信专项操作 (taoci)
+```powershell
+# 批量发送套磁信（CSV 驱动 + 模板引擎）
+.\mail.ps1 batch-send --csv "contacts.csv" --template A --attach "简历.pdf" --dry-run
+
+# 跟踪回复状态与 7 天未回复提醒
+.\mail.ps1 track --needs-followup
+```
+
+### 9. 本地可视化 Web 控制台 (前后端分离架构)
 ```powershell
 # 一键启动本地 REST API 服务并自动打开浏览器控制台
 .\ui.ps1
 # 或通过主入口启动
 .\mail.ps1 ui [--port 8000]
 ```
-> **架构设计**：采用标准的**前后端分离设计**。前端为原生 HTML5 + TailwindCSS 单页应用（SPA），后端为 Python 标准库轻量级 HTTP 服务（`web/server.py`），通过纯 JSON REST API 与本地底层 PowerShell 邮件引擎通信，零第三方环境依赖。
 
-### 8. 本地环境初始化向导 (setup-local.ps1)
+### 10. 本地环境初始化向导 (setup-local.ps1)
 ```powershell
 # 首次克隆后一键初始化本地私密配置
 .\setup-local.ps1
@@ -192,22 +248,23 @@ cd ..\fmail
 
 ## 🔌 RESTful JSON API 接口规范
 
-本地 Web 服务 (`web/server.py`) 提供以下开箱即用的 JSON 接口：
+本地 Web 服务 (`mail-ai/web/server.py`) 提供以下开箱即用的 JSON 接口：
 
 | 请求方式 | 接口端点 | 说明与参数 | 返回结构 |
 | :--- | :--- | :--- | :--- |
 | **GET** | `/api/doctor` | 全系统健康体检报告 | `{ score: 100, channels: {...}, profile: {...}, issues: [] }` |
-| **GET** | `/api/drafts` | 获取草稿箱列表（支持 `?via=edu`） | `[ { id: 1, to: "...", subject: "...", attachments: [...] } ]` |
-| **GET** | `/api/draft_detail` | 获取指定草稿全文（`?id=1&via=edu`） | `{ file: "...", to: "...", subject: "...", body: "...", attachments: [...] }` |
-| **GET** | `/api/attachments` | 扫描本地推免材料库 | `[ { id: 1, name: "...", size_mb: 4.24, is_default: true, valid: true } ]` |
-| **GET** | `/api/scan` | 巡检全邮箱文件夹状态（`?via=edu`） | `{ account: "edu", folders: {...}, risk_alert: false }` |
-| **GET** | `/api/profile` | 获取申请人科研画像配置 | `{ name: "...", school: "...", intent: "...", ... }` |
-| **POST** | `/api/check_mentor` | 导师投递查重与同组冲突诊断 | `{ name: "...", safe: true, duplicate: false, collision: false, ... }` |
+| **GET** | `/api/drafts` | 获取草稿箱列表（支持 `?via=edu`） | `[ { id, to, subject, attachments: [...] } ]` |
+| **GET** | `/api/draft_detail` | 获取指定草稿全文（`?id=1&via=edu`） | `{ file, to, subject, body, attachments: [...] }` |
+| **GET** | `/api/attachments` | 扫描本地推免材料库 | `[ { id, name, size_mb, is_default, valid } ]` |
+| **GET** | `/api/scan` | 巡检全邮箱文件夹状态（`?via=edu`） | `{ account, folders: {...}, risk_alert }` |
+| **GET** | `/api/profile` | 获取申请人科研画像配置 | `{ name, school, intent, ... }` |
+| **POST** | `/api/check_mentor` | 导师投递查重与同组冲突诊断 | `{ name, safe, duplicate, collision, ... }` |
 
 ---
 
 ## 🔒 隐私保护与安全隔离架构
 
 - **凭证安全**：所有授权码、API 密钥、`.env`、`.credential` 文件均被严格 `.gitignore`，且采用 Windows DPAPI 本地加密存储，绝不泄露至代码仓库。
-- **个人资产隔离**：所有个人通讯录 (`contacts.json`)、往来追踪 (`tracking.csv`)、简历附件 (`personal/attachments/`) 均存放在独立的 `personal/` 目录下，与开源核心引擎代码完全物理隔离。
+- **个人资产隔离**：所有个人通讯录 (`contacts.json`)、往来追踪 (`tracking.csv`)、简历附件 (`taoci/personal/attachments/`) 均存放在独立的 `personal/` 目录下，与开源核心引擎代码完全物理隔离。
+- **运行时数据隔离**：`mail-skill` 的本地索引数据 (`mail_data/`) 按账户隔离，含 SQLite 数据库、ChromaDB 向量索引、附件缓存、EML 归档，全部 gitignore 排除。
 - **物理防误删**：代码层面一票否决所有破坏性删除指令（永久阻断），确保邮件资产 100% 安全。

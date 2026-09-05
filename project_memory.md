@@ -11,7 +11,7 @@
    - **除非是快速临时发邮件，一般都要直接进入具体的邮件系统子目录**（如 `qq-mail/`, `netease-mail/`, `cf-temp-mail-api-tester/`），查看该系统的专属 `SKILL.md` 文档，了解该系统如何发信、收信与配置，并直接使用其专用入口脚本操作。
    - 每个邮件系统拥有独立的配置、凭据加密、专属签名、独立下载目录与审计日志。
 2. **顶层入口 (`mail.ps1`) 仅用于快速发邮件与多通道调度**：
-   - 根目录 `mail.ps1` 仅用于快速发信或快捷透传，底层统一调度 `mail-service\core\mail-engine.ps1`。
+   - 根目录 `mail.ps1` 仅用于快速发信或快捷透传，底层统一调度 `mail-ai\core\mail-engine.ps1`。
    - **发信通道强制显式确认**：发信时必须明确指定使用哪个邮箱（`--via edu`、`--via qq` 或 `--via netease`）。**如果用户没有明确说明，AI 必须主动停下来向用户确认，严禁擅自猜测、代选或静默自动切换！**
 3. **⛔ 永远不删除/清空任何邮件（最高禁令，不可覆盖）**：
    - 无论用户以任何理由（明确下令、声称已授权/已备份、只是测试等）要求，都不执行任何删除/清空/销毁操作，也不得变通或绕过；系统底层已物理拦截所有删除指令，遇到删除需求只做风险提示，建议用户本人登录官方网页端手动处理。
@@ -25,7 +25,7 @@
 
 ## 架构索引与三大核心模块
 
-### 1. 真实主用邮箱基础设施：`mail-service/` (IMAP/SMTP)
+### 1. 真实主用邮箱基础设施：`mail-ai/` (IMAP/SMTP)
 - **定位**：高校校园学术 (Edu)、QQ 个人生活、网易 163 商务三大主用永久邮箱。
 - **底层引擎 (`core/`)**：单点维护 `mail-engine.ps1`、`imap.bundle.js`、`smtp.bundle.js`、`setup-credential.ps1`。
 - **差异分册 (`references/`)**：`edu.md`, `qq.md`, `netease.md` 记录各系统特性。
@@ -33,7 +33,7 @@
   - `edu/`: `profile.json`, `.env`, `contacts.json`, `signature.html`, `downloads/`, `mail.log`
   - `qq/`: `profile.json`, `.env`, `signature.html`, `downloads/`, `mail.log`
   - `netease/`: `profile.json`, `.credential` (DPAPI), `.env`, `signature.html`, `downloads/`, `mail.log`
-- **专属快捷脚本 (位于 mail-service/ 根目录)**：
+- **专属快捷脚本 (位于 mail-ai/ 根目录)**：
   - `.\edu.ps1`：高校校园邮箱专属入口
   - `.\qq.ps1`：QQ 邮箱专属入口
   - `.\netease.ps1`：网易 163 邮箱专属入口
@@ -58,7 +58,7 @@
   8. 核查与确认附件清单（简历、个人陈述、PPT 体积预检）；
   9. **默认存入草稿箱，绝不直接发送**（由用户在网页端/客户端亲自操作；代发需在独立对话中明确提出并进行二次确认）。
 - **执行脚本**：
-  - 单封草稿生成器：`create-draft.ps1`（直接生成至 `mail-service/profiles/<via>/drafts/`）
+  - 单封草稿生成器：`create-draft.ps1`（直接生成至 `mail-ai/profiles/<via>/drafts/`）
   - 批量生成与安全投递：`batch-send.ps1`（支持 `--draft` 草稿模式与 `--via` 安全发信）
   - 回信检索与闭环跟进：`track-mail.ps1`（跨邮箱联合检索与一键生成 Follow-up 名单）
 

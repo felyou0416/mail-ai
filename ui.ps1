@@ -8,7 +8,7 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$serverScript = Join-Path $scriptDir "web\server.py"
+$serverScript = Join-Path $scriptDir "mail-ai\web\server.py"
 
 Write-Host ""
 Write-Host "=================================================================" -ForegroundColor Cyan

@@ -3,7 +3,7 @@
   统一邮件工具箱入口 (Unified Mail Gateway)
 .DESCRIPTION
   顶层快速发信与多通道调度入口。
-  底层统一调用 mail-service\core\mail-engine.ps1。
+  底层统一调用 mail-ai\core\mail-engine.ps1。
   
   通道支持：
     - edu: 高校校园邮箱 (student_id@your_school.edu.cn)
@@ -23,12 +23,12 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 $script:PROJECT_ROOT = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$script:ENGINE = Join-Path $script:PROJECT_ROOT "mail-service\core\mail-engine.ps1"
+$script:ENGINE = Join-Path $script:PROJECT_ROOT "mail-ai\core\mail-engine.ps1"
 
 function Show-Help {
     Write-Host ""
     Write-Host "  Unified Mail Tool — Edu | QQ | NetEase 163 | Fmail" -ForegroundColor Cyan
-    Write-Host "  Engine: mail-service\core\mail-engine.ps1" -ForegroundColor DarkGray
+    Write-Host "  Engine: mail-ai\core\mail-engine.ps1" -ForegroundColor DarkGray
     Write-Host ""
     Write-Host "  Usage:" -ForegroundColor White
     Write-Host "    .\mail.ps1 <command> [--via edu|qq|netease|fmail] [options]"
@@ -43,11 +43,19 @@ function Show-Help {
     Write-Host "    mark-read           标记为已读"
     Write-Host "    mark-unread         标记为未读"
     Write-Host "    list-mailboxes      列出所有文件夹"
-    Write-Host "    stats               查看文件夹统计
-    ui                  启动本地 Web 控制台 (前后端分离)"
+    Write-Host "    stats               查看文件夹统计"
+    Write-Host "    ui                  启动本地 Web 控制台 (前后端分离)"
     Write-Host "    cf / fmail          Cloudflare 临时邮箱操作"
     Write-Host "    batch-send / 套磁信  批量学术套磁信发送"
     Write-Host "    track               套磁信状态跟踪"
+    Write-Host ""
+    Write-Host "  智能本地库与 AI 分析 (mail-skill):" -ForegroundColor White
+    Write-Host "    sync / pull         同步并持久化邮件至本地 SQLite 向量库"
+    Write-Host "    smart-search        自然语言语义搜索邮件 (--query <text>)"
+    Write-Host "    summarize           生成邮件 Markdown 结构化摘要简报"
+    Write-Host "    classify            邮件智能重要度与类别自动分类"
+    Write-Host "    thread              邮件往来会话线索树状时间线呈现"
+    Write-Host "    skill               直接调用 mail-skill 底层命令"
     Write-Host ""
     Write-Host "  发信选项:" -ForegroundColor White
     Write-Host "    --via <channel>     必填发信通道 (edu | qq | netease)"
@@ -91,7 +99,7 @@ if ($via -in @("cf", "temp", "temp-mail")) { $via = "fmail" }
 switch ($command) {
 
     { $_ -in @("ui", "web", "dashboard") } {
-        $serverScript = Join-Path $script:PROJECT_ROOT "web\server.py"
+        $serverScript = Join-Path $script:PROJECT_ROOT "mail-ai\web\server.py"
         & python $serverScript --open @filteredArgs
         exit $LASTEXITCODE
     }
@@ -183,7 +191,7 @@ switch ($command) {
     }
 
     { $_ -in @("draft", "drafts", "list-drafts", "send-draft") } {
-        $draftScript = Join-Path $script:PROJECT_ROOT "mail-service\core/draft-manager.ps1"
+        $draftScript = Join-Path $script:PROJECT_ROOT "mail-ai\core/draft-manager.ps1"
         $viaParam = if ($via) { @("--via", $via) } else { @("--via", "edu") }
         if ($command -eq "send-draft") {
             & powershell -ExecutionPolicy Bypass -File $draftScript "send" @filteredArgs @viaParam
@@ -195,29 +203,29 @@ switch ($command) {
     }
 
     { $_ -in @("attach", "attachments") } {
-        $attScript = Join-Path $script:PROJECT_ROOT "套磁信\core\engine/attachment-manager.ps1"
+        $attScript = Join-Path $script:PROJECT_ROOT "taoci\core\engine/attachment-manager.ps1"
         & powershell -ExecutionPolicy Bypass -File $attScript @filteredArgs
     }
 
     { $_ -in @("scan", "mailbox-scan") } {
-        $scanScript = Join-Path $script:PROJECT_ROOT "mail-service\core/mailbox-inspector.ps1"
+        $scanScript = Join-Path $script:PROJECT_ROOT "mail-ai\core/mailbox-inspector.ps1"
         $viaParam = if ($via) { @("--via", $via) } else { @("--via", "edu") }
         & powershell -ExecutionPolicy Bypass -File $scanScript "scan" @filteredArgs @viaParam
     }
 
     { $_ -in @("search-all", "deep-search") } {
-        $scanScript = Join-Path $script:PROJECT_ROOT "mail-service/core/mailbox-inspector.ps1"
+        $scanScript = Join-Path $script:PROJECT_ROOT "mail-ai/core/mailbox-inspector.ps1"
         $viaParam = if ($via) { @("--via", $via) } else { @("--via", "edu") }
         & powershell -ExecutionPolicy Bypass -File $scanScript "search-all" @filteredArgs @viaParam
     }
 
     { $_ -in @("doctor", "check-all", "diagnose") } {
-        $doctorScript = Join-Path $script:PROJECT_ROOT "mail-service/core/system-doctor.ps1"
+        $doctorScript = Join-Path $script:PROJECT_ROOT "mail-ai/core/system-doctor.ps1"
         & powershell -ExecutionPolicy Bypass -File $doctorScript @filteredArgs
     }
 
     { $_ -in @("check-mentor", "mentor-check") } {
-        $mentorScript = Join-Path $script:PROJECT_ROOT "套磁信/core/engine/mentor-checker.ps1"
+        $mentorScript = Join-Path $script:PROJECT_ROOT "taoci/core/engine/mentor-checker.ps1"
         & powershell -ExecutionPolicy Bypass -File $mentorScript @filteredArgs
     }
 
@@ -231,7 +239,7 @@ switch ($command) {
     }
 
     { $_ -in @("batch-send", "taoci", "套磁", "套磁信") } {
-        $batchScript = Join-Path $script:PROJECT_ROOT "套磁信\scripts\batch-send.ps1"
+        $batchScript = Join-Path $script:PROJECT_ROOT "taoci\scripts\batch-send.ps1"
         if (Test-Path $batchScript) {
             & powershell -ExecutionPolicy Bypass -File $batchScript @filteredArgs
         } else {
@@ -240,12 +248,55 @@ switch ($command) {
     }
 
     "track" {
-        $trackScript = Join-Path $script:PROJECT_ROOT "套磁信\scripts\track-mail.ps1"
+        $trackScript = Join-Path $script:PROJECT_ROOT "taoci\scripts\track-mail.ps1"
         if (Test-Path $trackScript) {
             & powershell -ExecutionPolicy Bypass -File $trackScript @filteredArgs
         } else {
             Write-Host "[ERROR] 未找到套磁信追踪脚本: $trackScript" -ForegroundColor Red
         }
+    }
+
+    # ---------------- 智能本地库与 AI 分析 (mail-skill) ----------------
+    { $_ -in @("sync", "pull", "fetch-all") } {
+        $skillCli = Join-Path $script:PROJECT_ROOT "mail-ai\mail-skill\scripts\mail_cli.py"
+        $accountParam = if ($via) { @("--account", $via) } else { @() }
+        & python $skillCli fetch @accountParam @filteredArgs
+        exit $LASTEXITCODE
+    }
+
+    { $_ -in @("smart-search", "ai-search", "ask-mail") } {
+        $skillCli = Join-Path $script:PROJECT_ROOT "mail-ai\mail-skill\scripts\mail_cli.py"
+        $accountParam = if ($via) { @("--account", $via) } else { @() }
+        & python $skillCli smart-search @accountParam @filteredArgs
+        exit $LASTEXITCODE
+    }
+
+    { $_ -in @("summarize", "digest") } {
+        $skillCli = Join-Path $script:PROJECT_ROOT "mail-ai\mail-skill\scripts\mail_cli.py"
+        $accountParam = if ($via) { @("--account", $via) } else { @() }
+        & python $skillCli summarize @accountParam @filteredArgs
+        exit $LASTEXITCODE
+    }
+
+    "classify" {
+        $skillCli = Join-Path $script:PROJECT_ROOT "mail-ai\mail-skill\scripts\mail_cli.py"
+        $accountParam = if ($via) { @("--account", $via) } else { @() }
+        & python $skillCli classify @accountParam @filteredArgs
+        exit $LASTEXITCODE
+    }
+
+    "thread" {
+        $skillCli = Join-Path $script:PROJECT_ROOT "mail-ai\mail-skill\scripts\mail_cli.py"
+        $accountParam = if ($via) { @("--account", $via) } else { @() }
+        & python $skillCli thread @accountParam @filteredArgs
+        exit $LASTEXITCODE
+    }
+
+    "skill" {
+        $skillCli = Join-Path $script:PROJECT_ROOT "mail-ai\mail-skill\scripts\mail_cli.py"
+        $accountParam = if ($via) { @("--account", $via) } else { @() }
+        & python $skillCli @accountParam @filteredArgs
+        exit $LASTEXITCODE
     }
 
     default {

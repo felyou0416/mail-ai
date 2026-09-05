@@ -1,0 +1,31 @@
+﻿# ===================================================
+# 个人隐私隔离防泄露规则 (Personal Privacy Protection)
+# ===================================================
+
+# 保护个人通讯录与私密联系人
+personal/contacts.csv
+personal/followup.csv
+
+# 保护个人发信追踪记录与回信数据
+personal/tracking.csv
+tracking.csv
+
+# 保护个人真实学生画像（包含学号、导师与经历）
+personal/profile.json
+student_profile.json
+
+# 保护所有个人附件（PDF/Word/PPT）
+personal/attachments/*.pdf
+personal/attachments/*.docx
+personal/attachments/*.pptx
+*.pdf
+*.docx
+*.pptx
+
+# 含学生个人信息的实战复盘（原始版绝不上云；如需开源请先脱敏）
+docs/
+
+# 已发送邮件存档（含完整正文与个人信息）
+personal/sent/
+# 个人科研复盘（含隐私）
+personal/references/
